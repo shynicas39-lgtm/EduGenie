@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f7f7f2">
+    <meta name="description" content="A thoughtful, personal learning assistant powered by Google Gemini.">
+    <title>EduGenie | Your learning desk</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script type="module" src="app.js"></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Workspace sidebar">
+        <a class="brand" href="#" aria-label="EduGenie home">
+          <span class="brand-mark" aria-hidden="true">e</span>
+          <span>edu<span class="brand-light">genie</span></span>
+        </a>
+
+        <button class="new-chat-button" id="new-chat" type="button"><span aria-hidden="true">+</span> New session</button>
+
+        <div class="sidebar-label">YOUR DESK</div>
+        <nav class="sidebar-nav" aria-label="Main navigation">
+          <button class="nav-item active" id="learn-nav" type="button" aria-current="page"><span class="nav-icon" aria-hidden="true">◫</span> Learning desk</button>
+          <button class="nav-item" id="history-nav" type="button"><span class="nav-icon" aria-hidden="true">◷</span> Recent sessions</button>
+        </nav>
+
+        <div class="history-heading">
+          <span class="sidebar-label">YOUR SESSIONS</span>
+          <span class="history-count" id="history-count">0</span>
+        </div>
+        <div class="session-list" id="session-list" aria-label="Saved sessions"></div>
+
+        <div class="sidebar-bottom">
+          <div class="connection-card" id="connection-card">
+            <span class="connection-dot" aria-hidden="true"></span>
+            <span id="connection-label">Gemini not connected</span>
+            <button class="connection-settings" id="open-settings" type="button" aria-label="Open Gemini settings" title="Gemini settings">···</button>
+          </div>
+          <button class="profile-button" id="profile-settings" type="button">
+            <span class="avatar">E</span>
+            <span class="profile-copy"><strong>Your study space</strong><span>Personal workspace</span></span>
+            <span class="profile-more" aria-hidden="true">···</span>
+          </button>
+        </div>
+      </aside>
+
+      <main class="main-panel">
+        <header class="topbar">
+          <div class="breadcrumb"><span>Workspace</span><span class="breadcrumb-divider">/</span><strong id="breadcrumb-current">Learning desk</strong></div>
+          <div class="topbar-actions">
+            <span class="model-label"><span class="model-dot" aria-hidden="true"></span> Gemini 2.5 Flash</span>
+            <button class="settings-button" id="top-settings" type="button"><span aria-hidden="true">⚙</span> Settings</button>
+          </div>
+        </header>
+
+        <section class="workspace" aria-label="Learning assistant">
+          <div class="workspace-inner">
+            <div class="welcome-view" id="welcome-view">
+              <div class="welcome-kicker"><span class="kicker-line"></span> A LITTLE CURIOSITY GOES A LONG WAY</div>
+              <h1>What shall we<br><span>figure out today?</span></h1>
+              <p class="welcome-description">A patient tutor for the questions you’re curious about, stuck on, or not quite ready to ask in class.</p>
+
+              <div class="prompt-composer welcome-composer" id="welcome-composer">
+                <label class="sr-only" for="welcome-input">Ask EduGenie a question</label>
+                <textarea id="welcome-input" rows="2" placeholder="Ask anything you’re learning..."></textarea>
+                <div class="composer-footer">
+                  <div class="composer-controls">
+                    <label class="select-wrap">
+                      <span class="sr-only">Subject</span>
+                      <select id="welcome-subject" aria-label="Choose a subject">
+                        <option value="General">◉ General</option>
+                        <option value="Mathematics">∑ Mathematics</option>
+                        <option value="Science">⚛ Science</option>
+                        <option value="Writing">✎ Writing</option>
+                        <option value="Languages">文 Languages</option>
+                        <option value="History">◷ History</option>
+                      </select>
+                    </label>
+                    <label class="select-wrap mode-select-wrap">
+                      <span class="sr-only">Learning mode</span>
+                      <select id="welcome-mode" aria-label="Choose a learning mode">
+                        <option value="Tutor">Tutor</option>
+                        <option value="Explain simply">Explain simply</option>
+                        <option value="Quiz me">Quiz me</option>
+                        <option value="Study plan">Study plan</option>
+                      </select>
+                    </label>
+                  </div>
+                  <button class="send-button" id="welcome-send" type="button" aria-label="Send question">↑</button>
+                </div>
+              </div>
+
+              <div class="suggestion-section">
+                <div class="suggestion-heading"><span>TRY ASKING</span><span class="suggestion-rule"></span></div>
+                <div class="suggestion-grid">
+                  <button class="suggestion" data-prompt="Can you explain fractions using a real-life example?" data-subject="Mathematics" type="button"><span class="suggestion-icon icon-math">½</span><span><strong>Make a tricky idea click</strong><small>Fractions, explained with pizza</small></span><span class="suggestion-arrow" aria-hidden="true">↗</span></button>
+                  <button class="suggestion" data-prompt="Why is the sky blue? Explain it step by step." data-subject="Science" type="button"><span class="suggestion-icon icon-science">✳</span><span><strong>Follow a why-question</strong><small>Start with the blue sky</small></span><span class="suggestion-arrow" aria-hidden="true">↗</span></button>
+                  <button class="suggestion" data-prompt="Quiz me on the water cycle, one question at a time." data-subject="Science" data-mode="Quiz me" type="button"><span class="suggestion-icon icon-quiz">?</span><span><strong>Test what you know</strong><small>A friendly water-cycle quiz</small></span><span class="suggestion-arrow" aria-hidden="true">↗</span></button>
+                </div>
+              </div>
+
+              <div class="photo-note">
+                <img src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=1000&q=85" alt="A sunlit desk with an open book and notes">
+                <div class="photo-caption"><span class="photo-sparkle" aria-hidden="true">✳</span><span><strong>Good questions make great beginnings.</strong><small>Take your time. We’ll work it out together.</small></span></div>
+              </div>
+              <p class="privacy-note">AI can make mistakes. Check important facts with a trusted source.</p>
+            </div>
+
+            <div class="chat-view hidden" id="chat-view" aria-live="polite">
+              <div class="chat-messages" id="chat-messages"></div>
+              <div class="chat-compose-wrap">
+                <div class="prompt-composer chat-composer">
+                  <label class="sr-only" for="chat-input">Ask a follow-up</label>
+                  <textarea id="chat-input" rows="1" placeholder="Ask a follow-up..."></textarea>
+                  <div class="composer-footer">
+                    <div class="composer-controls">
+                      <label class="select-wrap"><span class="sr-only">Subject</span><select id="chat-subject" aria-label="Choose a subject"><option value="General">◉ General</option><option value="Mathematics">∑ Mathematics</option><option value="Science">⚛ Science</option><option value="Writing">✎ Writing</option><option value="Languages">文 Languages</option><option value="History">◷ History</option></select></label>
+                      <label class="select-wrap mode-select-wrap"><span class="sr-only">Learning mode</span><select id="chat-mode" aria-label="Choose a learning mode"><option value="Tutor">Tutor</option><option value="Explain simply">Explain simply</option><option value="Quiz me">Quiz me</option><option value="Study plan">Study plan</option></select></label>
+                    </div>
+                    <button class="send-button" id="chat-send" type="button" aria-label="Send question">↑</button>
+                  </div>
+                </div>
+                <p class="privacy-note">EduGenie can make mistakes. Double-check anything important.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <dialog class="settings-dialog" id="settings-dialog" aria-labelledby="settings-title">
+      <form method="dialog" class="dialog-topbar"><span class="dialog-mark">e</span><button class="dialog-close" aria-label="Close settings">×</button></form>
+      <div class="dialog-content">
+        <div class="dialog-eyebrow">YOUR CONNECTION</div>
+        <h2 id="settings-title">Connect Gemini</h2>
+        <p class="dialog-description">Add a Google Gemini API key to start a private tutoring session. Your key stays in this browser and is sent directly to Google when you ask a question.</p>
+        <label class="key-label" for="api-key">Gemini API key</label>
+        <div class="key-input-wrap"><input id="api-key" type="password" autocomplete="off" placeholder="Paste your API key"><button type="button" id="toggle-key" aria-label="Show API key">Show</button></div>
+        <a class="api-link" href="https://aistudio.google.com/app/apikey" target="_blank" rel="noreferrer">Get an API key from Google AI Studio <span aria-hidden="true">↗</span></a>
+        <div class="key-security"><span aria-hidden="true">⌑</span><span>Stored only in your browser’s local storage. Don’t use a shared device or a key with unrestricted production access.</span></div>
+        <div class="dialog-actions"><button class="remove-key-button" id="remove-key" type="button">Remove key</button><button class="save-key-button" id="save-key" type="button">Save connection</button></div>
+        <p class="dialog-status" id="settings-status" role="status"></p>
+      </div>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
